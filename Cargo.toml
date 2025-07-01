@@ -1,0 +1,31 @@
+[package]
+name = "sgtl5000"
+authors = ["Gergo Huszty <gergo.huszty@digitaltrip.hu>"]
+categories = [
+    "embedded",
+    "hardware-support",
+    "no-std",
+    "no-std::no-alloc",
+    "multimedia::audio"
+]
+description = "Embedded driver crate for the SGTL5000 DAC."
+documentation = "https://docs.rs/crate/sgtl5000"
+keywords = [
+    "arm",
+    "cortex-m",
+    "embedded",
+    "audio"
+]
+license = "Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/libesz/sgtl5000-rs"
+
+version = "0.0.1"
+edition = "2024"
+
+[dependencies]
+bitfield = "0.19.1"
+embedded-hal = "1.0"
+
+[dev-dependencies]
+embedded-hal-mock = "0.11.1"
