@@ -1,3 +1,5 @@
+use bitfield::bitfield;
+
 // SGTL5000 register address definitions
 
 #[allow(dead_code)]
@@ -102,7 +104,6 @@ pub const DAP_COEF_WR_A2_MSB: u16 = 0x0138;
 #[allow(dead_code)]
 pub const DAP_COEF_WR_A2_LSB: u16 = 0x013A;
 
-use bitfield::bitfield;
 bitfield! {
     pub(crate) struct ChipI2sCtrl(u16);
     impl Debug;
@@ -114,6 +115,12 @@ bitfield! {
     pub sclk_inv, set_sclk_inv: 6;
     pub ms, set_ms: 7;
     pub sclkfreq, set_sclkfreq: 8;
+}
+
+impl Default for ChipI2sCtrl {
+    fn default() -> Self {
+        Self(0x0030)
+    }
 }
 
 pub enum I2sMode {
@@ -153,5 +160,158 @@ impl From<I2sMode> for InternalI2sMode {
                 lralign: true,
             },
         }
+    }
+}
+
+bitfield! {
+    pub(crate) struct ChipClkCtrl(u16);
+    impl Debug;
+
+    pub mclk_freq, set_mclk_freq: 1, 0;
+    pub sys_fs, set_sys_fs: 3, 2;
+    pub rate_mode, set_rate_mode: 5, 4;
+}
+
+impl Default for ChipClkCtrl{
+    fn default() -> Self {
+        Self(0x0008)
+    }
+}
+
+bitfield! {
+    pub(crate) struct ChipAnaPower(u16);
+    impl Debug;
+
+    pub lineout_powerup, set_lineout_powerup: 0;
+    pub adc_powerup, set_adc_powerup: 1;
+    pub capless_headphone_powerup, set_capless_headphone_powerup: 2;
+    pub dac_powerup, set_dav_powerup: 3;
+    pub headphone_powerup, set_headphone_powerup: 4;
+    pub reftop_powerup, set_reftop_powerup: 5;
+    pub adc_mono, set_adc_mono: 6;
+    pub vag_powerup, set_vag_powerup: 7;
+    pub vcoamp_powerup, set_vcoamp_powerup: 8;
+    pub linereg_d_powerup, set_linereg_d_powerup: 9;
+    pub pll_powerup, set_pll_powerup: 10;
+    pub vddc_chrgpmp_powerup, set_vddc_chrgpmp_powerup: 11;
+    pub startup_powerup, set_startup_powerup: 12;
+    pub linreg_simple_powerup, set_linreg_simple_powerup: 13;
+    pub dac_mono, set_dac_mono: 14;
+}
+
+impl Default for ChipAnaPower {
+    fn default() -> Self {
+        Self(0x40ff)
+    }
+}
+
+bitfield!{
+    pub(crate) struct ChipDigPower(u16);
+    impl Debug;
+
+    pub i2s_in_powerup, set_i2s_in_powerup: 0;
+    pub i2s_out_powerup, set_i2s_out_powerup: 1;
+    pub dap_powerup, set_dap_powerup: 4;
+    pub dac_powerup, set_dac_powerup: 5;
+    pub adc_powerup, set_adc_powerup: 6;
+}
+
+impl Default for ChipDigPower{
+    fn default() -> Self {
+        Self(0x0073)
+    }
+}
+
+bitfield! {
+    pub(crate) struct ChipLinregCtrl(u16);
+    impl Debug;
+
+    pub d_programming, set_d_programming: 3, 0;
+    pub vddc_assn_ovrd, set_vddc_assn_ovrd: 5;
+    pub vddc_man_assn, set_vddc_man_assn: 6;
+}
+
+impl Default for ChipLinregCtrl {
+    fn default() -> Self {
+        Self(0x006c)
+    }
+}
+
+bitfield! {
+    pub(crate) struct ChipRefCtrl(u16);
+    impl Debug;
+
+    pub small_pop, set_small_pop: 0;
+    pub bias_ctrl, set_bias_ctrl: 3, 1;
+    pub vag_val, set_vag_val: 8, 4;
+}
+
+impl Default for ChipRefCtrl {
+    fn default() -> Self {
+        Self(0x01f2)
+    }
+}
+
+bitfield! {
+    pub(crate) struct ChipLineOutCtrl(u16);
+    impl Debug;
+
+    pub lo_vagcntrl, set_lo_vagcntrl: 5, 0;
+    pub out_current, set_out_current: 11, 8;
+}
+
+impl Default for ChipLineOutCtrl {
+    fn default() -> Self {
+        Self(0x0F22)
+    }
+}
+
+bitfield! {
+    pub(crate) struct ChipShortCtrl(u16);
+    impl Debug;
+
+    pub mode_cm, set_mode_cm: 1, 0;
+    pub mode_lr, set_mode_lr: 3, 2;
+    pub lvladjc, set_lvladjc: 6, 4;
+    pub lvladjl, set_lvladjl: 10, 8;
+    pub lvladjr, set_lvladjr: 14, 12;
+}
+
+impl Default for ChipShortCtrl {
+    fn default() -> Self {
+        Self(0x4446)
+    }
+}
+
+bitfield! {
+    pub(crate) struct ChipAnaCtrl(u16);
+    impl Debug;
+
+    pub mute_adc, set_mute_adc: 0;
+    pub en_zcd_adc, set_en_zcd_adc: 1;
+    pub select_adc, set_select_adc: 2;
+    pub mute_hp, set_mute_hp: 4;
+    pub en_zcd_hp, set_en_zcd_hp: 5;
+    pub select_hp, set_select_hp: 6;
+    pub mute_lo, set_mute_lo: 8;
+}
+
+impl Default for ChipAnaCtrl {
+    fn default() -> Self {
+        Self(0x0137)
+    }
+}
+
+bitfield!{
+    pub(crate) struct ChipLineOutVol(u16);
+    impl Debug;
+
+    pub lo_vol_left, set_lo_vol_left: 4, 0;
+    pub lo_vol_right, set_lo_vol_right: 12, 8;
+}
+
+impl Default for ChipLineOutVol{
+    fn default() -> Self {
+        Self(0x1D1D)
     }
 }
