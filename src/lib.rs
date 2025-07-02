@@ -38,7 +38,7 @@ where
         chip_i2s_ctrl.set_i2s_mode(mode_internal.i2s_mode);
         chip_i2s_ctrl.set_lralign(mode_internal.lralign);
         self.write_register(registers::CHIP_I2S_CTRL, chip_i2s_ctrl.0)?;
-        return Ok(());
+        Ok(())
     }
 
     pub fn release(self) -> I2C {

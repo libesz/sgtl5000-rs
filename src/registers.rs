@@ -129,9 +129,9 @@ pub(crate) struct InternalI2sMode {
     pub lralign: bool,
 }
 
-impl Into<InternalI2sMode> for I2sMode {
-    fn into(self) -> InternalI2sMode {
-        match self {
+impl From<I2sMode> for InternalI2sMode {
+    fn from(val: I2sMode) -> Self {
+        match val {
             I2sMode::I2s => InternalI2sMode {
                 i2s_mode: 0x0,
                 lralign: false,
