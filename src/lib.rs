@@ -32,6 +32,28 @@ where
         self.i2c.write(self.address, &data)
     }
 
+    pub fn init(&mut self) -> Result<(), I2C::Error> {
+        self.write_register(CHIP_ANA_POWER, ChipAnaPower::bootstrap_default().0)?;
+        self.write_register(CHIP_LINREG_CTRL, ChipLinregCtrl::default().0)?;
+        self.write_register(CHIP_REF_CTRL, ChipRefCtrl::default().0)?;
+        self.write_register(CHIP_LINE_OUT_CTRL, ChipLineOutCtrl::default().0)?;
+        self.write_register(CHIP_SHORT_CTRL, ChipShortCtrl::default().0)?;
+        self.write_register(CHIP_ANA_CTRL, ChipAnaCtrl::default().0)?;
+        self.write_register(CHIP_ANA_POWER, ChipAnaPower::default().0)?;
+        self.write_register(CHIP_DIG_POWER, ChipDigPower::default().0)?;
+        self.write_register(CHIP_LINE_OUT_CTRL, ChipLineOutCtrl::default().0)?;
+        self.write_register(CHIP_LINE_OUT_VOL, ChipLineOutVol::default().0)?;
+        self.write_register(CHIP_CLK_CTRL, ChipClkCtrl::default().0)?;
+        self.write_register(CHIP_I2S_CTRL, ChipI2sCtrl::default().0)?;
+        self.write_register(CHIP_SSS_CTRL, ChipSssCtrl::default().0)?;
+        self.write_register(CHIP_ADCDAC_CTRL, ChipAdcdacCtrl::default().0)?;
+        self.write_register(CHIP_DAC_VOL, ChipDacVol::default().0)?;
+        self.write_register(CHIP_ANA_HP_CTRL, ChipAnaHpCtrl::default().0)?;
+        self.write_register(CHIP_ANA_ADC_CTRL, ChipAnaAdcCtrl::default().0)?;
+        self.write_register(CHIP_ANA_CTRL, ChipAnaCtrl::default().0)?;
+        Ok(())
+    }
+
     pub fn set_i2s_mode(&mut self, mode: registers::I2sMode) -> Result<(), I2C::Error> {
         let mut chip_i2s_ctrl = ChipI2sCtrl(self.read_register(registers::CHIP_I2S_CTRL)?);
         let mode_internal: registers::InternalI2sMode = mode.into();

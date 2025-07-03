@@ -104,6 +104,10 @@ pub const DAP_COEF_WR_A2_MSB: u16 = 0x0138;
 #[allow(dead_code)]
 pub const DAP_COEF_WR_A2_LSB: u16 = 0x013A;
 
+pub trait BootstrapDefault: Sized{
+    fn bootstrap_default() -> Self;
+}
+
 bitfield! {
     pub(crate) struct ChipI2sCtrl(u16);
     impl Debug;
@@ -164,6 +168,89 @@ impl From<I2sMode> for InternalI2sMode {
 }
 
 bitfield! {
+    pub(crate) struct ChipSssCtrl(u16);
+    impl Debug;
+    
+    pub i2_s_select, set_i2_s_select: 1, 0;
+    pub dac_select, set_dac_select: 5, 4;
+    pub dap_select, set_dap_select: 7, 6;
+    pub dap_mix_select, set_dap_mix_select: 9, 8;
+    pub i2_s_lrswap, set_i2_s_lrswap: 10;
+    pub dac_lrswap, set_dac_lrswap: 12;
+    pub dap_lrswap, set_dap_lrswap: 13;
+    pub dap_mix_lrswa, set_dap_mix_lrswa: 14;
+}
+
+impl Default for ChipSssCtrl {
+    fn default() -> Self {
+        Self(0x0010)
+    }
+}
+
+bitfield! {
+    pub(crate) struct ChipAdcdacCtrl(u16);
+    impl Debug;
+
+    pub adc_hpf_bypass, set_adc_hpf_bypass: 0;
+    pub adc_hpf_freeze, set_adc_hpf_freeze: 1;
+    pub dac_mute_left, set_dac_mute_left: 2;
+    pub dac_mute_right, set_dac_mute_right: 3;
+    pub vol_expo_ramp, set_vol_expo_ramp: 8;
+    pub vol_ramp_en, set_vol_ramp_en: 9;
+    pub vol_busy_dac_left, set_vol_busy_dac_left: 12;
+    pub vol_busy_dac_right, set_vol_busy_dac_right: 13;
+}
+
+impl Default for ChipAdcdacCtrl {
+    fn default() -> Self {
+        Self(0x0055)
+    }
+}
+
+bitfield! {
+    pub(crate) struct ChipAnaHpCtrl(u16);
+    impl Debug;
+
+    pub hp_vol_left, set_hp_vol_left: 6, 0;
+    pub hp_vol_right, set_hp_vol_right: 14, 8;
+}
+
+impl Default for ChipAnaHpCtrl{
+    fn default() -> Self {
+        Self(0x4040)
+    }
+}
+
+bitfield! {
+    pub(crate) struct ChipAnaAdcCtrl(u16);
+    impl Debug;
+
+    pub adc_vol_left, set_adc_vol_left: 3, 0;
+    pub adc_vol_right, set_adc_vol_right: 7, 4;
+    pub adc_vol_m6db, set_adc_vol_m6db: 8;
+}
+
+impl Default for ChipAnaAdcCtrl{
+    fn default() -> Self {
+        Self(0x0055)
+    }
+}
+
+bitfield! {
+    pub(crate) struct ChipDacVol(u16);
+    impl Debug;
+
+    pub dac_vol_left, set_dac_vol_left: 7, 0;
+    pub dac_vol_right, set_dac_vol_right: 15, 8;
+}
+
+impl Default for ChipDacVol {
+    fn default() -> Self {
+        Self(0x3C3C)
+    }
+}
+
+bitfield! {
     pub(crate) struct ChipClkCtrl(u16);
     impl Debug;
 
@@ -202,6 +289,12 @@ bitfield! {
 impl Default for ChipAnaPower {
     fn default() -> Self {
         Self(0x40ff)
+    }
+}
+
+impl BootstrapDefault for ChipAnaPower {
+    fn bootstrap_default() -> Self {
+        Self(0x4060)
     }
 }
 
@@ -298,7 +391,7 @@ bitfield! {
 
 impl Default for ChipAnaCtrl {
     fn default() -> Self {
-        Self(0x0137)
+        Self(0x0036)
     }
 }
 
