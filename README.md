@@ -12,7 +12,7 @@ The goal is to hide low-level register manipulation from the user. Instead, the 
 
 * ✅ Add all register addresses.
 * ✅ Implement the first exposed high-level method that communicates with the codec.
-* Add or generate all essential register bitfields required to use the codec.
+* ✅ Add or generate all essential register bitfields required to use the codec.
 * Expose essential high-level codec controls needed for basic operation.
 * Add a default initialization function to bootstrap the codec with common settings.
 * Add support for on-demand features (input selection, volume control, mute, etc.).

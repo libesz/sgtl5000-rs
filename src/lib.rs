@@ -1,5 +1,7 @@
 #![no_std]
 
+pub use registers::I2sDataLength;
+pub use registers::SampleRate;
 mod registers;
 
 use embedded_hal::i2c::{I2c, SevenBitAddress};
@@ -69,6 +71,20 @@ where
         chip_clk_ctrl.set_sys_fs(rate);
         self.write_register(CHIP_CLK_CTRL, chip_clk_ctrl.0)?;
         Ok(())
+    }
+
+    pub fn dump_device_config(&mut self) {
+        use core::fmt::Write;
+        let mut buf = heapless::String::<256>::new();
+        write!(buf, "[").unwrap();
+        for i in 0..=30 {
+            if let Ok(result) = self.read_register(i * 2) {
+                write!(buf, "{:#06X}, ", result).unwrap();
+            }
+        }
+        write!(buf, "]").unwrap();
+        log::info!("SGTL5000 config: {}", buf);
+
     }
 
     pub fn release(self) -> I2C {

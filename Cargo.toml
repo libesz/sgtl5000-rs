@@ -26,6 +26,8 @@ edition = "2024"
 [dependencies]
 bitfield = "0.19.1"
 embedded-hal = "1.0"
+heapless = "0.8.0"
+log = "0.4"
 
 [dev-dependencies]
 embedded-hal-mock = "0.11.1"
