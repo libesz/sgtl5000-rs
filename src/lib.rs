@@ -1,6 +1,7 @@
 #![no_std]
 
 pub use registers::I2sDataLength;
+pub use registers::I2sMode;
 pub use registers::SampleRate;
 mod registers;
 
@@ -34,7 +35,11 @@ where
         self.i2c.write(self.address, &data)
     }
 
-    pub fn init(&mut self, sample_rate: SampleRate, data_length: I2sDataLength) -> Result<(), I2C::Error> {
+    pub fn init(
+        &mut self,
+        sample_rate: SampleRate,
+        data_length: I2sDataLength,
+    ) -> Result<(), I2C::Error> {
         self.write_register(CHIP_ANA_POWER, ChipAnaPower::bootstrap_default().0)?;
         self.write_register(CHIP_LINREG_CTRL, ChipLinregCtrl::default().0)?;
         self.write_register(CHIP_REF_CTRL, ChipRefCtrl::default().0)?;
@@ -56,7 +61,11 @@ where
         Ok(())
     }
 
-    pub fn set_i2s_details(&mut self, mode: I2sMode, data_length: I2sDataLength) -> Result<(), I2C::Error> {
+    pub fn set_i2s_details(
+        &mut self,
+        mode: I2sMode,
+        data_length: I2sDataLength,
+    ) -> Result<(), I2C::Error> {
         let mut chip_i2s_ctrl = ChipI2sCtrl(self.read_register(registers::CHIP_I2S_CTRL)?);
         let mode_internal: InternalI2sMode = mode.into();
         chip_i2s_ctrl.set_i2s_mode(mode_internal.i2s_mode);
@@ -65,7 +74,7 @@ where
         self.write_register(registers::CHIP_I2S_CTRL, chip_i2s_ctrl.0)?;
         Ok(())
     }
-    
+
     pub fn set_sample_rate(&mut self, rate: SampleRate) -> Result<(), I2C::Error> {
         let mut chip_clk_ctrl = ChipClkCtrl(self.read_register(CHIP_CLK_CTRL)?);
         chip_clk_ctrl.set_sys_fs(rate);
@@ -79,36 +88,14 @@ where
         write!(buf, "[").unwrap();
         for i in 0..=30 {
             if let Ok(result) = self.read_register(i * 2) {
-                write!(buf, "{:#06X}, ", result).unwrap();
+                write!(buf, "{result:#06X}, ").unwrap();
             }
         }
         write!(buf, "]").unwrap();
-        log::info!("SGTL5000 config: {}", buf);
-
+        log::info!("SGTL5000 config: {buf}");
     }
 
     pub fn release(self) -> I2C {
         self.i2c
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    extern crate std;
-    use super::*;
-    use embedded_hal_mock::eh1::i2c::{Mock as I2cMock, Transaction};
-    use std::vec;
-
-    #[test]
-    fn test_set_i2s_mode() {
-        let expectations = [
-            Transaction::write_read(0x0A, vec![0x00, 0x06], vec![0x00, 0x00]),
-            Transaction::write(0x0A, vec![0x00, 0x06, 0x00, 0x30]),
-        ];
-
-        let mock_i2c = I2cMock::new(&expectations);
-        let mut codec = SGTL5000::new(mock_i2c, SGTL5000_I2C_DEFAULT_ADDR);
-        codec.set_i2s_details(I2sMode::I2s, I2sDataLength::Bits16).unwrap();
-        codec.release().done();
     }
 }

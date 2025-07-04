@@ -23,11 +23,44 @@ repository = "https://github.com/libesz/sgtl5000-rs"
 version = "0.0.1"
 edition = "2024"
 
+[features]
+default = []
+real-hal = ["imxrt-hal", "board", "rtic", "cortex-m", "defmt"]
+mock-hal = ["embedded-hal-mock"]
+
 [dependencies]
 bitfield = "0.19.1"
 embedded-hal = "1.0"
 heapless = "0.8.0"
 log = "0.4"
 
-[dev-dependencies]
-embedded-hal-mock = "0.11.1"
+[dependencies.embedded-hal-mock]
+version = "0.11.1"
+optional = true
+
+[dependencies.imxrt-hal]
+# version = "0.8"
+path = "../teensy/imxrt-hal"
+optional = true
+
+[dependencies.board]
+path = "../teensy/imxrt-hal/board"
+optional = true
+features = ["teensy4", "sai"]
+
+[dependencies.rtic]
+version = "2.0"
+features = ["thumbv7-backend"]
+optional = true
+
+[dependencies.defmt]
+version = "0.3"
+optional = true
+
+[dependencies.cortex-m]
+version = "0.7"
+optional = true
+
+[[example]]
+name = "teensy_passthrough"
+required-features = ["real-hal"]

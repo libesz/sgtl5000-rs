@@ -104,7 +104,7 @@ pub const DAP_COEF_WR_A2_MSB: u16 = 0x0138;
 #[allow(dead_code)]
 pub const DAP_COEF_WR_A2_LSB: u16 = 0x013A;
 
-pub trait BootstrapDefault: Sized{
+pub trait BootstrapDefault: Sized {
     fn bootstrap_default() -> Self;
 }
 
@@ -132,7 +132,7 @@ pub enum I2sDataLength {
     Bits32,
     Bits24,
     Bits20,
-    Bits16
+    Bits16,
 }
 
 impl From<u16> for I2sDataLength {
@@ -141,7 +141,7 @@ impl From<u16> for I2sDataLength {
             0 => I2sDataLength::Bits32,
             1 => I2sDataLength::Bits24,
             2 => I2sDataLength::Bits20,
-            _ => I2sDataLength::Bits16
+            _ => I2sDataLength::Bits16,
         }
     }
 }
@@ -200,7 +200,7 @@ impl From<I2sMode> for InternalI2sMode {
 bitfield! {
     pub(crate) struct ChipSssCtrl(u16);
     impl Debug;
-    
+
     pub i2_s_select, set_i2_s_select: 1, 0;
     pub dac_select, set_dac_select: 5, 4;
     pub dap_select, set_dap_select: 7, 6;
@@ -245,7 +245,7 @@ bitfield! {
     pub hp_vol_right, set_hp_vol_right: 14, 8;
 }
 
-impl Default for ChipAnaHpCtrl{
+impl Default for ChipAnaHpCtrl {
     fn default() -> Self {
         Self(0x4040)
     }
@@ -260,7 +260,7 @@ bitfield! {
     pub adc_vol_m6db, set_adc_vol_m6db: 8;
 }
 
-impl Default for ChipAnaAdcCtrl{
+impl Default for ChipAnaAdcCtrl {
     fn default() -> Self {
         Self(0x0055)
     }
@@ -289,7 +289,7 @@ bitfield! {
     pub rate_mode, set_rate_mode: 5, 4;
 }
 
-impl Default for ChipClkCtrl{
+impl Default for ChipClkCtrl {
     fn default() -> Self {
         Self(0x0008)
     }
@@ -300,7 +300,7 @@ pub enum SampleRate {
     Hz32000,
     Hz44100,
     Hz48000,
-    Hz96000
+    Hz96000,
 }
 
 impl From<u16> for SampleRate {
@@ -358,7 +358,7 @@ impl BootstrapDefault for ChipAnaPower {
     }
 }
 
-bitfield!{
+bitfield! {
     pub(crate) struct ChipDigPower(u16);
     impl Debug;
 
@@ -369,7 +369,7 @@ bitfield!{
     pub adc_powerup, set_adc_powerup: 6;
 }
 
-impl Default for ChipDigPower{
+impl Default for ChipDigPower {
     fn default() -> Self {
         Self(0x0073)
     }
@@ -455,7 +455,7 @@ impl Default for ChipAnaCtrl {
     }
 }
 
-bitfield!{
+bitfield! {
     pub(crate) struct ChipLineOutVol(u16);
     impl Debug;
 
@@ -463,7 +463,7 @@ bitfield!{
     pub lo_vol_right, set_lo_vol_right: 12, 8;
 }
 
-impl Default for ChipLineOutVol{
+impl Default for ChipLineOutVol {
     fn default() -> Self {
         Self(0x1D1D)
     }
