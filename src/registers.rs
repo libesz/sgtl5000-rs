@@ -255,13 +255,43 @@ bitfield! {
     impl Debug;
 
     pub mclk_freq, set_mclk_freq: 1, 0;
-    pub sys_fs, set_sys_fs: 3, 2;
+    pub from into SampleRate, sys_fs, set_sys_fs: 3, 2;
     pub rate_mode, set_rate_mode: 5, 4;
 }
 
 impl Default for ChipClkCtrl{
     fn default() -> Self {
         Self(0x0008)
+    }
+}
+
+#[derive(Debug)]
+pub enum SampleRate {
+    Hz32000,
+    Hz44100,
+    Hz48000,
+    Hz96000
+}
+
+impl From<u16> for SampleRate {
+    fn from(value: u16) -> Self {
+        match value {
+            0b00 => SampleRate::Hz32000,
+            0b01 => SampleRate::Hz44100,
+            0b10 => SampleRate::Hz48000,
+            _ => SampleRate::Hz96000,
+        }
+    }
+}
+
+impl From<SampleRate> for u16 {
+    fn from(value: SampleRate) -> Self {
+        match value {
+            SampleRate::Hz32000 => 0b00,
+            SampleRate::Hz44100 => 0b01,
+            SampleRate::Hz48000 => 0b10,
+            _ => 0x11,
+        }
     }
 }
 

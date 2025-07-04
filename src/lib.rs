@@ -32,7 +32,7 @@ where
         self.i2c.write(self.address, &data)
     }
 
-    pub fn init(&mut self) -> Result<(), I2C::Error> {
+    pub fn init(&mut self, sample_rate: SampleRate) -> Result<(), I2C::Error> {
         self.write_register(CHIP_ANA_POWER, ChipAnaPower::bootstrap_default().0)?;
         self.write_register(CHIP_LINREG_CTRL, ChipLinregCtrl::default().0)?;
         self.write_register(CHIP_REF_CTRL, ChipRefCtrl::default().0)?;
@@ -43,7 +43,7 @@ where
         self.write_register(CHIP_DIG_POWER, ChipDigPower::default().0)?;
         self.write_register(CHIP_LINE_OUT_CTRL, ChipLineOutCtrl::default().0)?;
         self.write_register(CHIP_LINE_OUT_VOL, ChipLineOutVol::default().0)?;
-        self.write_register(CHIP_CLK_CTRL, ChipClkCtrl::default().0)?;
+        self.set_sample_rate(sample_rate)?;
         self.write_register(CHIP_I2S_CTRL, ChipI2sCtrl::default().0)?;
         self.write_register(CHIP_SSS_CTRL, ChipSssCtrl::default().0)?;
         self.write_register(CHIP_ADCDAC_CTRL, ChipAdcdacCtrl::default().0)?;
@@ -54,12 +54,19 @@ where
         Ok(())
     }
 
-    pub fn set_i2s_mode(&mut self, mode: registers::I2sMode) -> Result<(), I2C::Error> {
+    pub fn set_i2s_mode(&mut self, mode: I2sMode) -> Result<(), I2C::Error> {
         let mut chip_i2s_ctrl = ChipI2sCtrl(self.read_register(registers::CHIP_I2S_CTRL)?);
-        let mode_internal: registers::InternalI2sMode = mode.into();
+        let mode_internal: InternalI2sMode = mode.into();
         chip_i2s_ctrl.set_i2s_mode(mode_internal.i2s_mode);
         chip_i2s_ctrl.set_lralign(mode_internal.lralign);
         self.write_register(registers::CHIP_I2S_CTRL, chip_i2s_ctrl.0)?;
+        Ok(())
+    }
+
+    pub fn set_sample_rate(&mut self, rate: SampleRate) -> Result<(), I2C::Error> {
+        let mut chip_clk_ctrl = ChipClkCtrl(self.read_register(CHIP_CLK_CTRL)?);
+        chip_clk_ctrl.set_sys_fs(rate);
+        self.write_register(CHIP_CLK_CTRL, chip_clk_ctrl.0)?;
         Ok(())
     }
 
