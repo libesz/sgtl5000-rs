@@ -70,6 +70,7 @@ checksum = "1b8e56985ec62d17e9c1001dc89c88ecd7dc08e47eba5ec7c29c7b5eeecde967"
 [[package]]
 name = "board"
 version = "0.1.0"
+source = "git+https://github.com/imxrt-rs/imxrt-hal.git?rev=74a2ba44147f3aa01624efe7fca8140de7ba7a58#74a2ba44147f3aa01624efe7fca8140de7ba7a58"
 dependencies = [
  "cortex-m",
  "defmt 0.3.100",
@@ -368,6 +369,7 @@ dependencies = [
 [[package]]
 name = "imxrt-hal"
 version = "0.6.0"
+source = "git+https://github.com/imxrt-rs/imxrt-hal.git?rev=74a2ba44147f3aa01624efe7fca8140de7ba7a58#74a2ba44147f3aa01624efe7fca8140de7ba7a58"
 dependencies = [
  "bitflags 1.3.2",
  "cfg-if",
@@ -396,6 +398,7 @@ checksum = "84f18ac9e9dc69b6ffe23dd15896c5faa260b5f1097baa5d23c3f3ed7350292d"
 [[package]]
 name = "imxrt-log"
 version = "0.2.0"
+source = "git+https://github.com/imxrt-rs/imxrt-hal.git?rev=74a2ba44147f3aa01624efe7fca8140de7ba7a58#74a2ba44147f3aa01624efe7fca8140de7ba7a58"
 dependencies = [
  "bbqueue",
  "critical-section",

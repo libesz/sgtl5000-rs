@@ -40,11 +40,14 @@ optional = true
 
 [dependencies.imxrt-hal]
 # version = "0.8"
-path = "../teensy/imxrt-hal"
+git = "https://github.com/imxrt-rs/imxrt-hal.git"
+rev = "74a2ba44147f3aa01624efe7fca8140de7ba7a58"
 optional = true
 
 [dependencies.board]
-path = "../teensy/imxrt-hal/board"
+git = "https://github.com/imxrt-rs/imxrt-hal.git"
+package = "board"
+rev = "74a2ba44147f3aa01624efe7fca8140de7ba7a58"
 optional = true
 features = ["teensy4", "sai"]
 
