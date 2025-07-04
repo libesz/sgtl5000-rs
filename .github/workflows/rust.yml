@@ -16,6 +16,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Install a stable toolchain, clippy, for the MCU target
+      run: rustup toolchain install stable --no-self-update --profile minimal --component clippy --target thumbv7em-none-eabihf
+    - name: Install a stable toolchain with rustfmt
+      run: rustup toolchain install stable --no-self-update --profile minimal --component rustfmt
+    - name: Check formatting
+      run: make fmt
     - name: Build
       run: make build
     - name: Build examples

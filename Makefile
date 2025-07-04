@@ -10,3 +10,6 @@ test:
 clippy:
 	cargo clippy
 	cargo clippy --examples --features=real-hal --target=thumbv7em-none-eabihf
+
+fmt:
+	cargo fmt --all -- --check
