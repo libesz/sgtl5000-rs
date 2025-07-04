@@ -115,7 +115,7 @@ bitfield! {
     pub lrpol, set_lrpol: 0;
     pub lralign, set_lralign: 1;
     pub i2s_mode, set_i2s_mode: 3, 2;
-    pub dlen, set_dlen: 5, 4;
+    pub from into I2sDataLength, dlen, set_dlen: 5, 4;
     pub sclk_inv, set_sclk_inv: 6;
     pub ms, set_ms: 7;
     pub sclkfreq, set_sclkfreq: 8;
@@ -124,6 +124,36 @@ bitfield! {
 impl Default for ChipI2sCtrl {
     fn default() -> Self {
         Self(0x0030)
+    }
+}
+
+#[derive(Debug)]
+pub enum I2sDataLength {
+    Bits32,
+    Bits24,
+    Bits20,
+    Bits16
+}
+
+impl From<u16> for I2sDataLength {
+    fn from(value: u16) -> Self {
+        match value {
+            0 => I2sDataLength::Bits32,
+            1 => I2sDataLength::Bits24,
+            2 => I2sDataLength::Bits20,
+            _ => I2sDataLength::Bits16
+        }
+    }
+}
+
+impl From<I2sDataLength> for u16 {
+    fn from(value: I2sDataLength) -> Self {
+        match value {
+            I2sDataLength::Bits32 => 0b00,
+            I2sDataLength::Bits24 => 0b01,
+            I2sDataLength::Bits20 => 0b10,
+            I2sDataLength::Bits16 => 0b11,
+        }
     }
 }
 
